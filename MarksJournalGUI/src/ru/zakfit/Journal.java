@@ -7,16 +7,25 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JDesktopPane;
+import javax.swing.UIManager;
+
 import java.awt.Color;
+
 import javax.swing.JInternalFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JSpinner;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyVetoException;
+
 import javax.swing.JTable;
 import javax.swing.JScrollBar;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.BevelBorder;
 
 public class Journal {
 
@@ -32,6 +41,8 @@ public class Journal {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					//ставим Fool and Feel в стиле Windows
+					UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel"); 
 					Journal window = new Journal();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
@@ -64,6 +75,12 @@ public class Journal {
 		frame.getContentPane().add(desktopPane);
 		
 		JInternalFrame settingslFrame = new JInternalFrame("\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u0436\u0443\u0440\u043D\u0430\u043B\u0430");
+		try {
+			settingslFrame.setClosed(true);
+		} catch (PropertyVetoException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 		settingslFrame.setBounds(27, 26, 306, 201);
 		desktopPane.add(settingslFrame);
 		settingslFrame.getContentPane().setLayout(null);
@@ -85,16 +102,25 @@ public class Journal {
 		settingslFrame.getContentPane().add(lblMarksCount);
 		
 		JSpinner spinPupils = new JSpinner();
+		spinPupils.setModel(new SpinnerNumberModel(1, 1, 10, 1));
 		spinPupils.setToolTipText("\u043D\u0435 \u0431\u043E\u043B\u0435\u0435 10!");
 		spinPupils.setBounds(131, 24, 29, 20);
 		settingslFrame.getContentPane().add(spinPupils);
 		
 		JSpinner spinMarks = new JSpinner();
+		spinMarks.setModel(new SpinnerNumberModel(1, 1, 10, 1));
+		lblMarksCount.setLabelFor(spinMarks);
 		spinMarks.setToolTipText("\u043D\u0435 \u0431\u043E\u043B\u0435\u0435 10!");
-		spinMarks.setBounds(195, 73, 29, 20);
+		spinMarks.setBounds(195, 73, 38, 20);
 		settingslFrame.getContentPane().add(spinMarks);
 		
 		JInternalFrame addPupilFrame = new JInternalFrame("\u0414\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0443\u0447\u0435\u043D\u0438\u043A\u0430");
+		try {
+			addPupilFrame.setClosed(true);
+		} catch (PropertyVetoException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		addPupilFrame.setBounds(371, 26, 319, 201);
 		desktopPane.add(addPupilFrame);
 		addPupilFrame.getContentPane().setLayout(null);
@@ -122,6 +148,8 @@ public class Journal {
 		addPupilFrame.getContentPane().add(lblMarks);
 		
 		tableMarks = new JTable();
+		tableMarks.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		tableMarks.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableMarks.setBounds(99, 25, 163, 100);
 		addPupilFrame.getContentPane().add(tableMarks);
 		
@@ -130,7 +158,13 @@ public class Journal {
 		addPupilFrame.getContentPane().add(scrlMarks);
 		
 		JInternalFrame journalFrame = new JInternalFrame("\u0416\u0443\u0440\u043D\u0430\u043B");
-		journalFrame.setBounds(39, 265, 294, 211);
+		try {
+			journalFrame.setClosed(true);
+		} catch (PropertyVetoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		journalFrame.setBounds(27, 253, 294, 211);
 		desktopPane.add(journalFrame);
 		journalFrame.getContentPane().setLayout(null);
 		
@@ -151,8 +185,13 @@ public class Journal {
 		journalFrame.getContentPane().add(lblJournal);
 		
 		tableJournal = new JTable();
-		tableJournal.setBounds(10, 42, 258, 96);
+		tableJournal.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		tableJournal.setBounds(10, 42, 231, 96);
 		journalFrame.getContentPane().add(tableJournal);
+		
+		JScrollBar scrollBar = new JScrollBar();
+		scrollBar.setBounds(251, 42, 17, 94);
+		journalFrame.getContentPane().add(scrollBar);
 		journalFrame.setVisible(true);
 		addPupilFrame.setVisible(true);
 		settingslFrame.setVisible(true);
@@ -171,6 +210,12 @@ public class Journal {
 		
 		JMenuItem mntmExit = new JMenuItem("\u0412\u044B\u0445\u043E\u0434");
 		mnFile.add(mntmExit);
+		
+		JMenu mnJnl = new JMenu("\u0416\u0443\u0440\u043D\u0430\u043B");
+		menuBar.add(mnJnl);
+		
+		JMenuItem mntmShowJnl = new JMenuItem("\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u044C \u0436\u0443\u0440\u043D\u0430\u043B");
+		mnJnl.add(mntmShowJnl);
 		
 		JMenu menuEdit = new JMenu("\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C");
 		menuBar.add(menuEdit);
