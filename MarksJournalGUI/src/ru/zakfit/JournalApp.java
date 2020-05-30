@@ -26,6 +26,8 @@ import javax.swing.JScrollBar;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 
 public class JournalApp {
 
@@ -35,6 +37,7 @@ public class JournalApp {
 	private JTextField textPupilNumber;
 	private JTable tableJournal;
 	private JTable tableMarks;
+	private final Action action = new SwingAction();
 
 	/**
 	 * Launch the application.
@@ -78,47 +81,47 @@ public class JournalApp {
 		desktopPane.setBounds(0, 0, 780, 540);
 		frame.getContentPane().add(desktopPane);
 		
-		JInternalFrame settingslFrame = new JInternalFrame("\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u0436\u0443\u0440\u043D\u0430\u043B\u0430");
+		JInternalFrame newJnlFrame = new JInternalFrame("\u041D\u043E\u0432\u044B\u0439 \u0436\u0443\u0440\u043D\u0430\u043B");
 		try {
-			settingslFrame.setClosed(true);
+			newJnlFrame.setClosed(true);
 		} catch (PropertyVetoException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-		settingslFrame.setBounds(27, 26, 306, 201);
-		desktopPane.add(settingslFrame);
-		settingslFrame.getContentPane().setLayout(null);
+		newJnlFrame.setBounds(27, 26, 306, 201);
+		desktopPane.add(newJnlFrame);
+		newJnlFrame.getContentPane().setLayout(null);
 		
 		JButton btnOK1 = new JButton("\u041E\u041A");
 		btnOK1.setBounds(131, 137, 60, 23);
-		settingslFrame.getContentPane().add(btnOK1);
+		newJnlFrame.getContentPane().add(btnOK1);
 		
 		JButton btnCancel1 = new JButton("\u041E\u0442\u043C\u0435\u043D\u0430");
 		btnCancel1.setBounds(201, 137, 79, 23);
-		settingslFrame.getContentPane().add(btnCancel1);
+		newJnlFrame.getContentPane().add(btnCancel1);
 		
 		JLabel lblPupilsCount = new JLabel("\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0443\u0447\u0435\u043D\u0438\u043A\u043E\u0432:");
 		lblPupilsCount.setBounds(10, 27, 132, 14);
-		settingslFrame.getContentPane().add(lblPupilsCount);
+		newJnlFrame.getContentPane().add(lblPupilsCount);
 		
 		JLabel lblMarksCount = new JLabel("\u041C\u0430\u043A\u0441\u0438\u043C\u0430\u043B\u044C\u043D\u043E\u0435 \u043A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \r\n\u043E\u0446\u0435\u043D\u043E\u043A:");
 		lblMarksCount.setBounds(10, 65, 181, 37);
-		settingslFrame.getContentPane().add(lblMarksCount);
+		newJnlFrame.getContentPane().add(lblMarksCount);
 		
 		JSpinner spinPupils = new JSpinner();
 		spinPupils.setModel(new SpinnerNumberModel(1, 1, 10, 1));
 		spinPupils.setToolTipText("\u043D\u0435 \u0431\u043E\u043B\u0435\u0435 10!");
 		spinPupils.setBounds(131, 24, 29, 20);
-		settingslFrame.getContentPane().add(spinPupils);
+		newJnlFrame.getContentPane().add(spinPupils);
 		
 		JSpinner spinMarks = new JSpinner();
 		spinMarks.setModel(new SpinnerNumberModel(1, 1, 10, 1));
 		lblMarksCount.setLabelFor(spinMarks);
 		spinMarks.setToolTipText("\u043D\u0435 \u0431\u043E\u043B\u0435\u0435 10!");
 		spinMarks.setBounds(195, 73, 38, 20);
-		settingslFrame.getContentPane().add(spinMarks);
+		newJnlFrame.getContentPane().add(spinMarks);
 		
-		JInternalFrame addPupilFrame = new JInternalFrame("\u0414\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0443\u0447\u0435\u043D\u0438\u043A\u0430");
+		JInternalFrame addPupilFrame = new JInternalFrame("\u041D\u043E\u0432\u044B\u0439 \u0443\u0447\u0435\u043D\u0438\u043A");
 		try {
 			addPupilFrame.setClosed(true);
 		} catch (PropertyVetoException e1) {
@@ -198,7 +201,7 @@ public class JournalApp {
 		journalFrame.getContentPane().add(scrollBar);
 		journalFrame.setVisible(true);
 		addPupilFrame.setVisible(true);
-		settingslFrame.setVisible(true);
+		newJnlFrame.setVisible(true);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
@@ -209,8 +212,8 @@ public class JournalApp {
 		JMenuItem mntmOpenJournal = new JMenuItem("\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u0436\u0443\u0440\u043D\u0430\u043B");
 		mnFile.add(mntmOpenJournal);
 		
-		JMenuItem menuSettingsJournal = new JMenuItem("\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u0436\u0443\u0440\u043D\u0430\u043B\u0430");
-		mnFile.add(menuSettingsJournal);
+		JMenuItem menuNewJournal = new JMenuItem("\u0421\u043E\u0437\u0434\u0430\u0442\u044C \u0436\u0443\u0440\u043D\u0430\u043B");
+		mnFile.add(menuNewJournal);
 		
 		JMenuItem mntmExit = new JMenuItem("\u0412\u044B\u0445\u043E\u0434");
 		mnFile.add(mntmExit);
@@ -226,5 +229,13 @@ public class JournalApp {
 		
 		JMenuItem mntmEditPupil = new JMenuItem("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0443\u0447\u0435\u043D\u0438\u043A\u0430");
 		menuEdit.add(mntmEditPupil);
+	}
+	private class SwingAction extends AbstractAction {
+		public SwingAction() {
+			putValue(NAME, "SwingAction");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
 	}
 }
