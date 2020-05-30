@@ -26,11 +26,15 @@ import javax.swing.JScrollBar;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
+import javax.swing.table.DefaultTableModel;
 
 
 public class JournalApp {
 
 	private static Journal classJnl;
+	private static Object[] columnsMarksHeader = new String[] {"Оценки"};
+	private DefaultTableModel tableMarksModel;
+	private DefaultTableModel tableJournalModel;
 	//Интерфейс
 	private JFrame frame;
 	private JTextField textPupilNumber;
@@ -73,19 +77,13 @@ public class JournalApp {
 		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+		//Desktop приложения
 		JDesktopPane desktopPane = new JDesktopPane();
 		desktopPane.setBackground(Color.LIGHT_GRAY);
 		desktopPane.setBounds(0, 0, 780, 540);
 		frame.getContentPane().add(desktopPane);
-		
+		//Форма создания нового журнала
 		JInternalFrame newJnlFrame = new JInternalFrame("\u041D\u043E\u0432\u044B\u0439 \u0436\u0443\u0440\u043D\u0430\u043B");
-		try {
-			newJnlFrame.setClosed(true);
-		} catch (PropertyVetoException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
 		newJnlFrame.setBounds(27, 26, 306, 201);
 		desktopPane.add(newJnlFrame);
 		newJnlFrame.getContentPane().setLayout(null);
@@ -120,13 +118,10 @@ public class JournalApp {
 		spinMarks.setBounds(195, 73, 38, 20);
 		newJnlFrame.getContentPane().add(spinMarks);
 		
+		newJnlFrame.setVisible(false);
+		
+		//Форма добавления/редактирования ученика
 		JInternalFrame addPupilFrame = new JInternalFrame("\u041D\u043E\u0432\u044B\u0439 \u0443\u0447\u0435\u043D\u0438\u043A");
-		try {
-			addPupilFrame.setClosed(true);
-		} catch (PropertyVetoException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		addPupilFrame.setBounds(371, 26, 319, 201);
 		desktopPane.add(addPupilFrame);
 		addPupilFrame.getContentPane().setLayout(null);
@@ -153,23 +148,24 @@ public class JournalApp {
 		lblMarks.setBounds(99, 11, 60, 14);
 		addPupilFrame.getContentPane().add(lblMarks);
 		
-		tableMarks = new JTable();
+		//модель таблицы оценок ученика (заголовок, связь с массивом оценок класса Pupil) 
+		tableMarksModel = new DefaultTableModel();
+		tableMarksModel.setColumnIdentifiers(columnsMarksHeader);
+		
+		tableMarks = new JTable(tableMarksModel);
 		tableMarks.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		tableMarks.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableMarks.setBounds(99, 25, 163, 100);
+		
 		addPupilFrame.getContentPane().add(tableMarks);
 		
 		JScrollBar scrlMarks = new JScrollBar();
 		scrlMarks.setBounds(265, 26, 17, 100);
 		addPupilFrame.getContentPane().add(scrlMarks);
 		
+		addPupilFrame.setVisible(false);
+		//Форма журнала
 		JInternalFrame journalFrame = new JInternalFrame("\u0416\u0443\u0440\u043D\u0430\u043B");
-		try {
-			journalFrame.setClosed(true);
-		} catch (PropertyVetoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		journalFrame.setBounds(27, 253, 294, 211);
 		desktopPane.add(journalFrame);
 		journalFrame.getContentPane().setLayout(null);
@@ -177,12 +173,18 @@ public class JournalApp {
 		JButton btnOK3 = new JButton("\u041E\u041A");
 		btnOK3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				journalFrame.setVisible(false);
 			}
 		});
 		btnOK3.setBounds(119, 147, 60, 23);
 		journalFrame.getContentPane().add(btnOK3);
 		
 		JButton btnCancel3 = new JButton("\u041E\u0442\u043C\u0435\u043D\u0430");
+		btnCancel3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				journalFrame.setVisible(false);
+			}
+		});
 		btnCancel3.setBounds(189, 147, 79, 23);
 		journalFrame.getContentPane().add(btnCancel3);
 		
@@ -190,7 +192,10 @@ public class JournalApp {
 		lblJournal.setBounds(69, 11, 132, 14);
 		journalFrame.getContentPane().add(lblJournal);
 		
-		tableJournal = new JTable();
+		//Модель таблицы журнала
+		tableJournalModel = new DefaultTableModel();
+		//Таблица дурнала
+		tableJournal = new JTable(tableJournalModel);
 		tableJournal.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		tableJournal.setBounds(10, 42, 231, 96);
 		journalFrame.getContentPane().add(tableJournal);
@@ -198,10 +203,7 @@ public class JournalApp {
 		JScrollBar scrollBar = new JScrollBar();
 		scrollBar.setBounds(251, 42, 17, 94);
 		journalFrame.getContentPane().add(scrollBar);
-		journalFrame.setVisible(true);
-		addPupilFrame.setVisible(true);
-		newJnlFrame.setVisible(true);
-		
+
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 		
@@ -214,8 +216,7 @@ public class JournalApp {
 		mntmOpenJournal.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
-				newJnlFrame.setVisible(true);
-				
+				journalFrame.setVisible(true);
 			}
 			
 		}
@@ -244,6 +245,14 @@ public class JournalApp {
 		menuBar.add(menuEdit);
 		
 		JMenuItem mntmEditPupil = new JMenuItem("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0443\u0447\u0435\u043D\u0438\u043A\u0430");
+		mntmEditPupil.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textPupilNumber.setText("");
+				//ограничиваем количество строк таблицы
+				tableMarksModel.setRowCount(classJnl.getMaxMarks());
+				addPupilFrame.setVisible(true);
+			}
+		});
 		menuEdit.add(mntmEditPupil);
 		
 		btnOK1.addActionListener(new ActionListener() {
