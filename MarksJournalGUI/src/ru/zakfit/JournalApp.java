@@ -91,6 +91,7 @@ public class JournalApp {
 		newJnlFrame.getContentPane().setLayout(null);
 		
 		JButton btnOK1 = new JButton("\u041E\u041A");
+		
 		btnOK1.setBounds(131, 137, 60, 23);
 		newJnlFrame.getContentPane().add(btnOK1);
 		
@@ -210,8 +211,25 @@ public class JournalApp {
 		JMenuItem mntmOpenJournal = new JMenuItem("\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u0436\u0443\u0440\u043D\u0430\u043B");
 		mnFile.add(mntmOpenJournal);
 		
+		mntmOpenJournal.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				newJnlFrame.setVisible(true);
+				
+			}
+			
+		}
+	);
+		
 		JMenuItem menuNewJournal = new JMenuItem("\u0421\u043E\u0437\u0434\u0430\u0442\u044C \u0436\u0443\u0440\u043D\u0430\u043B");
 		mnFile.add(menuNewJournal);
+		
+		menuNewJournal.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				newJnlFrame.setVisible(true);
+			}
+		});
 		
 		JMenuItem mntmExit = new JMenuItem("\u0412\u044B\u0445\u043E\u0434");
 		mnFile.add(mntmExit);
@@ -227,5 +245,13 @@ public class JournalApp {
 		
 		JMenuItem mntmEditPupil = new JMenuItem("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0443\u0447\u0435\u043D\u0438\u043A\u0430");
 		menuEdit.add(mntmEditPupil);
+		
+		btnOK1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				classJnl.setMaxMarks((Integer) spinMarks.getValue());
+				classJnl.setMaxPupils((Integer) spinPupils.getValue());			
+				newJnlFrame.setVisible(false);
+			}
+		});
 	}
 }
