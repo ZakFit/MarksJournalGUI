@@ -47,7 +47,7 @@ public class JournalApp {
 			public void run() {
 				try {
 					//ставим Look and Feel в стиле Windows
-					UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel"); 
+					//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel"); 
 					JournalApp window = new JournalApp();
 					window.frame.setVisible(true);
 				} catch (Exception e) {

@@ -3,6 +3,9 @@ package ru.zakfit;
 import java.util.ArrayList;
 
 public class Journal {
+	private int maxPupils;
+	private int maxMarks;
+	
 	private ArrayList<Pupil> pupils;
 
 	public ArrayList<Pupil> getPupils() {
@@ -24,4 +27,20 @@ public class Journal {
 	public Pupil getPupilByIndex(int pos) {
 			return this.pupils.get(pos);
 		}
+
+	public int getMaxPupils() {
+		return maxPupils;
+	}
+
+	public void setMaxPupils(int maxPupils) {
+		this.maxPupils = maxPupils;
+	}
+
+	public int getMaxMarks() {
+		return maxMarks;
+	}
+
+	public void setMaxMarks(int maxMarks) {
+		this.maxMarks = maxMarks;
+	}
 }

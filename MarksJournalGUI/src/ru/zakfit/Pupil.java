@@ -6,9 +6,9 @@ package ru.zakfit;
  *  avgMark
  */
 public class Pupil {
-	private Integer 	pupNumber;
-	private Integer[]  	pupMarks;
-	private Double		avgMark;	
+	private Integer pupNumber;
+	private Integer[] pupMarks;
+	private Double avgMark;	
 
 	public Integer getPupNumber() {
 		return pupNumber;
