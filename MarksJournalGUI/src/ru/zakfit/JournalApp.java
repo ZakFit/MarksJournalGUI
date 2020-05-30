@@ -26,8 +26,7 @@ import javax.swing.JScrollBar;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
+
 
 public class JournalApp {
 
@@ -37,7 +36,6 @@ public class JournalApp {
 	private JTextField textPupilNumber;
 	private JTable tableJournal;
 	private JTable tableMarks;
-	private final Action action = new SwingAction();
 
 	/**
 	 * Launch the application.
@@ -47,7 +45,7 @@ public class JournalApp {
 			public void run() {
 				try {
 					//ставим Look and Feel в стиле Windows
-					//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel"); 
+					UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel"); 
 					JournalApp window = new JournalApp();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
@@ -229,13 +227,5 @@ public class JournalApp {
 		
 		JMenuItem mntmEditPupil = new JMenuItem("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0443\u0447\u0435\u043D\u0438\u043A\u0430");
 		menuEdit.add(mntmEditPupil);
-	}
-	private class SwingAction extends AbstractAction {
-		public SwingAction() {
-			putValue(NAME, "SwingAction");
-			putValue(SHORT_DESCRIPTION, "Some short description");
-		}
-		public void actionPerformed(ActionEvent e) {
-		}
 	}
 }
