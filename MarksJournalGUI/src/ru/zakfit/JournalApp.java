@@ -122,7 +122,7 @@ public class JournalApp {
 		
 		//Форма добавления/редактирования ученика
 		JInternalFrame addPupilFrame = new JInternalFrame("\u041D\u043E\u0432\u044B\u0439 \u0443\u0447\u0435\u043D\u0438\u043A");
-		addPupilFrame.setBounds(371, 26, 319, 201);
+		addPupilFrame.setBounds(377, 26, 319, 201);
 		desktopPane.add(addPupilFrame);
 		addPupilFrame.getContentPane().setLayout(null);
 		
@@ -235,11 +235,26 @@ public class JournalApp {
 		JMenuItem mntmExit = new JMenuItem("\u0412\u044B\u0445\u043E\u0434");
 		mnFile.add(mntmExit);
 		
+		mntmExit.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
+		
+		
+		
 		JMenu mnJnl = new JMenu("\u0416\u0443\u0440\u043D\u0430\u043B");
 		menuBar.add(mnJnl);
 		
 		JMenuItem mntmShowJnl = new JMenuItem("\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u044C \u0436\u0443\u0440\u043D\u0430\u043B");
 		mnJnl.add(mntmShowJnl);
+		mntmShowJnl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+            journalFrame.setVisible(true);
+			}
+		});
+		
 		
 		JMenu menuEdit = new JMenu("\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C");
 		menuBar.add(menuEdit);
