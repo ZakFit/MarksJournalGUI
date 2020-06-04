@@ -27,6 +27,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 
 public class JournalApp {
@@ -122,17 +124,10 @@ public class JournalApp {
 		
 		//Форма добавления/редактирования ученика
 		JInternalFrame addPupilFrame = new JInternalFrame("\u041D\u043E\u0432\u044B\u0439 \u0443\u0447\u0435\u043D\u0438\u043A");
-		addPupilFrame.setBounds(377, 26, 319, 201);
+		addPupilFrame.setResizable(true);
+		addPupilFrame.setBounds(377, 26, 319, 268);
 		desktopPane.add(addPupilFrame);
 		addPupilFrame.getContentPane().setLayout(null);
-		
-		JButton btnOK2 = new JButton("\u041E\u041A");
-		btnOK2.setBounds(141, 137, 60, 23);
-		addPupilFrame.getContentPane().add(btnOK2);
-		
-		JButton btnCancel2 = new JButton("\u041E\u0442\u043C\u0435\u043D\u0430");
-		btnCancel2.setBounds(214, 137, 79, 23);
-		addPupilFrame.getContentPane().add(btnCancel2);
 		
 		JLabel lblPupilNumber = new JLabel("\u041D\u043E\u043C\u0435\u0440 \u0443\u0447\u0435\u043D\u0438\u043A\u0430:");
 		lblPupilNumber.setBounds(10, 11, 90, 14);
@@ -145,28 +140,59 @@ public class JournalApp {
 		textPupilNumber.setColumns(10);
 		
 		JLabel lblMarks = new JLabel("\u041E\u0446\u0435\u043D\u043A\u0438:");
-		lblMarks.setBounds(99, 11, 60, 14);
+		lblMarks.setBounds(110, 11, 60, 14);
 		addPupilFrame.getContentPane().add(lblMarks);
 		
-		//модель таблицы оценок ученика (заголовок, связь с массивом оценок класса Pupil) 
+		//модель таблицы оценок ученика 
 		tableMarksModel = new DefaultTableModel();
 		tableMarksModel.setColumnIdentifiers(columnsMarksHeader);
 		
 		tableMarks = new JTable(tableMarksModel);
 		tableMarks.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		tableMarks.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableMarks.setBounds(99, 25, 163, 100);
 		
+		//JScrollPane scrllPnPupMarks = new JScrollPane(tableMarks);
+		//scrllPnPupMarks.setBounds(289, 25, -173, 153);
+		//addPupilFrame.getContentPane().add(scrllPnPupMarks);
 		addPupilFrame.getContentPane().add(tableMarks);
 		
-		JScrollBar scrlMarks = new JScrollBar();
-		scrlMarks.setBounds(265, 26, 17, 100);
-		addPupilFrame.getContentPane().add(scrlMarks);
+		JButton btnOK2 = new JButton("\u041E\u041A");
+		btnOK2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Pupil tmpPup = new Pupil();
+				Integer[] pupMarks = new Integer[classJnl.getMaxMarks()];
+				//переводим таблицу из режима редактирования
+				if (tableMarks.isEditing()) 
+					tableMarks.getCellEditor().stopCellEditing();
+				for (int i = 0; i<classJnl.getMaxMarks(); i++){
+					if (tableMarks.getModel().getValueAt(i, 0) != null) 
+							pupMarks[i] = Integer.parseInt(tableMarks.getModel().getValueAt(i, 0).toString());
+					else  pupMarks[i] = 0;
+				}
+				tmpPup.setPupNumber(Integer.parseInt(textPupilNumber.getText()));
+				tmpPup.setPupMarks(pupMarks);
+				tmpPup.calcAvgMark();
+				classJnl.addPupil(tmpPup);
+				addPupilFrame.setVisible(false);
+			}
+		});
+		btnOK2.setBounds(147, 204, 60, 23);
+		addPupilFrame.getContentPane().add(btnOK2);
 		
+		JButton btnCancel2 = new JButton("\u041E\u0442\u043C\u0435\u043D\u0430");
+		btnCancel2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				addPupilFrame.setVisible(false);
+			}
+		});
+		btnCancel2.setBounds(217, 204, 79, 23);
+		addPupilFrame.getContentPane().add(btnCancel2);
+				
 		addPupilFrame.setVisible(false);
 		//Форма журнала
 		JInternalFrame journalFrame = new JInternalFrame("\u0416\u0443\u0440\u043D\u0430\u043B");
-		journalFrame.setBounds(27, 253, 294, 211);
+		journalFrame.setResizable(true);
+		journalFrame.setBounds(10, 249, 387, 280);
 		desktopPane.add(journalFrame);
 		journalFrame.getContentPane().setLayout(null);
 		
@@ -176,7 +202,7 @@ public class JournalApp {
 				journalFrame.setVisible(false);
 			}
 		});
-		btnOK3.setBounds(119, 147, 60, 23);
+		btnOK3.setBounds(212, 216, 60, 23);
 		journalFrame.getContentPane().add(btnOK3);
 		
 		JButton btnCancel3 = new JButton("\u041E\u0442\u043C\u0435\u043D\u0430");
@@ -185,25 +211,24 @@ public class JournalApp {
 				journalFrame.setVisible(false);
 			}
 		});
-		btnCancel3.setBounds(189, 147, 79, 23);
+		btnCancel3.setBounds(282, 216, 79, 23);
 		journalFrame.getContentPane().add(btnCancel3);
 		
 		JLabel lblJournal = new JLabel("\u0416\u0443\u0440\u043D\u0430\u043B \u0443\u0441\u043F\u0435\u0432\u0430\u0435\u043C\u043E\u0441\u0442\u0438");
-		lblJournal.setBounds(69, 11, 132, 14);
+		lblJournal.setBounds(120, 11, 132, 14);
 		journalFrame.getContentPane().add(lblJournal);
 		
 		//Модель таблицы журнала
 		tableJournalModel = new DefaultTableModel();
-		//Таблица дурнала
+		//Таблица журнала
 		tableJournal = new JTable(tableJournalModel);
 		tableJournal.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		tableJournal.setBounds(10, 42, 231, 96);
-		journalFrame.getContentPane().add(tableJournal);
 		
-		JScrollBar scrollBar = new JScrollBar();
-		scrollBar.setBounds(251, 42, 17, 94);
-		journalFrame.getContentPane().add(scrollBar);
-
+		JScrollPane scrllPnJournal = new JScrollPane(tableJournal);
+		scrllPnJournal.setBounds(10, 42, 351, 163);
+		journalFrame.getContentPane().add(scrllPnJournal);
+		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 		
@@ -242,8 +267,6 @@ public class JournalApp {
 			}
 		});
 		
-		
-		
 		JMenu mnJnl = new JMenu("\u0416\u0443\u0440\u043D\u0430\u043B");
 		menuBar.add(mnJnl);
 		
@@ -251,7 +274,26 @@ public class JournalApp {
 		mnJnl.add(mntmShowJnl);
 		mntmShowJnl.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-            journalFrame.setVisible(true);
+				String[] journalHeader = new String[classJnl.getMaxMarks()+2];
+				journalHeader[0] = "Номер ученика";
+				for (int i= 1; i<=classJnl.getMaxMarks(); i++){
+					journalHeader[i] = Integer.toString(i);
+				}
+				journalHeader[classJnl.getMaxMarks()+1] = "Средний балл";
+				tableJournalModel.setColumnIdentifiers(journalHeader);
+				tableJournalModel.setRowCount(classJnl.getMaxPupils());
+				if (classJnl.getPupils() != null)
+				{for (int i=0; i<classJnl.getMaxPupils();i++){
+					Pupil tmpPup = classJnl.getPupilByIndex(i);
+					tableJournalModel.setValueAt(tmpPup.getPupNumber(), i, 0);
+					Integer[] tmpMarks = tmpPup.getPupMarks();
+					for (int j = 0; j < classJnl.getMaxMarks(); j++) {
+						tableJournalModel.setValueAt(tmpMarks[j], i, j+1);
+					}
+					tableJournalModel.setValueAt(tmpPup.getAvgMark(), i, classJnl.getMaxMarks()+1);
+				}
+				}
+				journalFrame.setVisible(true);
 			}
 		});
 		

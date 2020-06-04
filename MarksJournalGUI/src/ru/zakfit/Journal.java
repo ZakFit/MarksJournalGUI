@@ -17,6 +17,8 @@ public class Journal {
 	}
 	// добавляем ученика в конец списка
 	public void addPupil(Pupil newPupil) {
+		if (this.pupils == null)
+			this.pupils = new ArrayList<Pupil>();
 		this.pupils.add(newPupil);
 	}
 	// добавляем ученика в определенную позицию

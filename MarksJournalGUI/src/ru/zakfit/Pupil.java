@@ -32,6 +32,10 @@ public class Pupil {
 // To-Do - реализовать вычисление среднего балла
 	public void calcAvgMark() {
 		Double tmpAvgMark = 0.0;
+		for (int i = 0; i < pupMarks.length; i++) {
+			tmpAvgMark = tmpAvgMark + pupMarks[i];
+		}
+		tmpAvgMark = tmpAvgMark / pupMarks.length;
 		this.avgMark = tmpAvgMark;
 	}
 	
