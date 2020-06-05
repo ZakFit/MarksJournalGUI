@@ -1,4 +1,8 @@
 package ru.zakfit;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /** Класс ученика
  *  содержит свойства:
  *  pupNumber
@@ -29,31 +33,35 @@ public class Pupil {
 	public Double getAvgMark() {
 		return avgMark;
 	}
-// To-Do - реализовать вычисление среднего балла
+	// округление до 2 знаков
+	private Double roundDblTo2(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    BigDecimal bd = BigDecimal.valueOf(value);
+	    bd = bd.setScale(places, RoundingMode.HALF_UP);
+	    return bd.doubleValue();
+	}
+	
 	public void calcAvgMark() {
 		Double tmpAvgMark = 0.0;
 		int cnt = 0;
 		double sum = 0.0;
-				for (int i = 0; i < pupMarks.length; i++) {
-					if (pupMarks[i] > 0) {
-						cnt++;
-						sum = sum + pupMarks[i];
-					} 
-			
+		for (int i = 0; i < pupMarks.length; i++) {
+			if (pupMarks[i] > 0) {
+				cnt++;
+				sum = sum + pupMarks[i];
+			} 
 		}
-				if (cnt>0) {
-					tmpAvgMark = sum / cnt;
-					this.avgMark = tmpAvgMark;
-				
-				}
-				else {
-					tmpAvgMark=0.0;
-					this.avgMark = tmpAvgMark;
-				}
-		this.avgMark = tmpAvgMark;
-		
-		  		 
+		if (cnt>0) {
+			tmpAvgMark = roundDblTo2(sum/cnt, 2);
+			this.avgMark = tmpAvgMark;
 		}
+		else {
+			tmpAvgMark = 0.0;
+			this.avgMark = tmpAvgMark;
+		}
+			  		 
 	}
+}
 	
 

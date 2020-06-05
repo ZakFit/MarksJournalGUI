@@ -2,6 +2,8 @@ package ru.zakfit;
 
 import java.awt.EventQueue;
 
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -20,24 +22,20 @@ import javax.swing.JSpinner;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 
 import javax.swing.JTable;
-import javax.swing.JScrollBar;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 
 
 public class JournalApp {
 
 	private static Journal classJnl;
 	private static Object[] columnsMarksHeader = new String[] {"Оценки"};
+	private static Integer[] cellMarksValues = new Integer[]{0,2,3,4,5};
 	private DefaultTableModel tableMarksModel;
 	private DefaultTableModel tableJournalModel;
 	//Интерфейс
@@ -150,13 +148,18 @@ public class JournalApp {
 		tableMarksModel = new DefaultTableModel();
 		tableMarksModel.setColumnIdentifiers(columnsMarksHeader);
 		
+		// модель ячейки оценок - выпадающий список с цифрами 0,2,3,4,5
+		JComboBox<Integer> marksComboBox = new JComboBox<Integer>(cellMarksValues); 	
+		DefaultCellEditor tableMarksCellEditor = new DefaultCellEditor(marksComboBox);
+			
 		tableMarks = new JTable(tableMarksModel);
 		tableMarks.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		tableMarks.setBounds(99, 25, 163, 100);
+		tableMarks.setRowHeight(25);
+		//устанавливаем модель ячеек
+		tableMarks.getColumnModel().getColumn(0).setCellEditor(tableMarksCellEditor);
 		
-		//JScrollPane scrllPnPupMarks = new JScrollPane(tableMarks);
-		//scrllPnPupMarks.setBounds(289, 25, -173, 153);
-		//addPupilFrame.getContentPane().add(scrllPnPupMarks);
+		//addPupilFrame.getContentPane().add(new JScrollPane(tableMarks));
 		addPupilFrame.getContentPane().add(tableMarks);
 		
 		JButton btnOK2 = new JButton("\u041E\u041A");
@@ -172,11 +175,17 @@ public class JournalApp {
 							pupMarks[i] = Integer.parseInt(tableMarks.getModel().getValueAt(i, 0).toString());
 					else  pupMarks[i] = 0;
 				}
-				tmpPup.setPupNumber(Integer.parseInt(textPupilNumber.getText()));
-				tmpPup.setPupMarks(pupMarks);
-				tmpPup.calcAvgMark();
-				classJnl.addPupil(tmpPup);
-				addPupilFrame.setVisible(false);
+				if (!textPupilNumber.getText().isEmpty()) {
+					tmpPup.setPupNumber(Integer.parseInt(textPupilNumber.getText()));
+					tmpPup.setPupMarks(pupMarks);
+					tmpPup.calcAvgMark();
+					classJnl.addPupil(tmpPup);
+					addPupilFrame.setVisible(false);
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(frame,"Не заполнен номер ученика", "Ошибка", JOptionPane.ERROR_MESSAGE);	
+				}	
 			}
 		});
 		btnOK2.setBounds(147, 204, 60, 23);
@@ -310,18 +319,22 @@ public class JournalApp {
 		mntmEditPupil.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int cntPup =0;
-				if (classJnl.getPupils() != null) cntPup = classJnl.getPupils().size();
+				if (classJnl.getPupils() != null) 
+					cntPup = classJnl.getPupils().size();
 				if (cntPup < classJnl.getMaxPupils())
 				{
 					textPupilNumber.setText("");
 					//ограничиваем количество строк таблицы
 					tableMarksModel.setRowCount(classJnl.getMaxMarks());
+					for (int i=0; i<tableMarksModel.getRowCount();i++){
+						tableMarksModel.setValueAt(0, i, 0);
+					}
 					addPupilFrame.setVisible(true);
 				}
-			else
-			{
-				JOptionPane.showMessageDialog(frame,"Превышено максимальное количество учеников!", "Ошибка", JOptionPane.ERROR_MESSAGE);	
-			}
+				else
+				{
+					JOptionPane.showMessageDialog(frame,"Превышено максимальное количество учеников!", "Ошибка", JOptionPane.ERROR_MESSAGE);	
+				}
 		}	
 		});
 		menuEdit.add(mntmEditPupil);
