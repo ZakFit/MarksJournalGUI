@@ -7,6 +7,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JDesktopPane;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 import java.awt.Color;
@@ -20,12 +21,14 @@ import javax.swing.JSpinner;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyVetoException;
+import java.util.ArrayList;
 
 import javax.swing.JTable;
 import javax.swing.JScrollBar;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -125,7 +128,7 @@ public class JournalApp {
 		//‘орма добавлени€/редактировани€ ученика
 		JInternalFrame addPupilFrame = new JInternalFrame("\u041D\u043E\u0432\u044B\u0439 \u0443\u0447\u0435\u043D\u0438\u043A");
 		addPupilFrame.setResizable(true);
-		addPupilFrame.setBounds(377, 26, 319, 268);
+		addPupilFrame.setBounds(428, 11, 319, 268);
 		desktopPane.add(addPupilFrame);
 		addPupilFrame.getContentPane().setLayout(null);
 		
@@ -283,7 +286,9 @@ public class JournalApp {
 				tableJournalModel.setColumnIdentifiers(journalHeader);
 				tableJournalModel.setRowCount(classJnl.getMaxPupils());
 				if (classJnl.getPupils() != null)
-				{for (int i=0; i<classJnl.getMaxPupils();i++){
+				{
+					ArrayList<Pupil> pupils = classJnl.getPupils();
+					for (int i=0; i<pupils.size();i++){
 					Pupil tmpPup = classJnl.getPupilByIndex(i);
 					tableJournalModel.setValueAt(tmpPup.getPupNumber(), i, 0);
 					Integer[] tmpMarks = tmpPup.getPupMarks();
@@ -304,11 +309,20 @@ public class JournalApp {
 		JMenuItem mntmEditPupil = new JMenuItem("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0443\u0447\u0435\u043D\u0438\u043A\u0430");
 		mntmEditPupil.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textPupilNumber.setText("");
-				//ограничиваем количество строк таблицы
-				tableMarksModel.setRowCount(classJnl.getMaxMarks());
-				addPupilFrame.setVisible(true);
+				int cntPup =0;
+				if (classJnl.getPupils() != null) cntPup = classJnl.getPupils().size();
+				if (cntPup < classJnl.getMaxPupils())
+				{
+					textPupilNumber.setText("");
+					//ограничиваем количество строк таблицы
+					tableMarksModel.setRowCount(classJnl.getMaxMarks());
+					addPupilFrame.setVisible(true);
+				}
+			else
+			{
+				JOptionPane.showMessageDialog(frame,"ѕревышено максимальное количество учеников!", "ќшибка", JOptionPane.ERROR_MESSAGE);	
 			}
+		}	
 		});
 		menuEdit.add(mntmEditPupil);
 		
