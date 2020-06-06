@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.BevelBorder;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
 
@@ -67,7 +68,6 @@ public class JournalApp {
 	 */
 	public JournalApp() {
 		//создаем экземпл€р журнала
-		classJnl = new Journal();
 		initialize();
 	}
 
@@ -99,6 +99,7 @@ public class JournalApp {
 		JButton btnCancel1 = new JButton("\u041E\u0442\u043C\u0435\u043D\u0430");
 		btnCancel1.setBounds(201, 137, 79, 23);
 		newJnlFrame.getContentPane().add(btnCancel1);
+		
 		
 		JLabel lblPupilsCount = new JLabel("\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0443\u0447\u0435\u043D\u0438\u043A\u043E\u0432:");
 		lblPupilsCount.setBounds(10, 27, 132, 14);
@@ -154,12 +155,12 @@ public class JournalApp {
 			
 		tableMarks = new JTable(tableMarksModel);
 		tableMarks.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		tableMarks.setBounds(99, 25, 163, 100);
+		tableMarks.setBounds(99, 25, 163, 168);
 		tableMarks.setRowHeight(25);
 		//устанавливаем модель €чеек
 		tableMarks.getColumnModel().getColumn(0).setCellEditor(tableMarksCellEditor);
 		
-		//addPupilFrame.getContentPane().add(new JScrollPane(tableMarks));
+		addPupilFrame.getContentPane().add(new JScrollPane(tableMarks));
 		addPupilFrame.getContentPane().add(tableMarks);
 		
 		JButton btnOK2 = new JButton("\u041E\u041A");
@@ -250,24 +251,14 @@ public class JournalApp {
 		JMenuItem mntmOpenJournal = new JMenuItem("\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u0436\u0443\u0440\u043D\u0430\u043B");
 		mnFile.add(mntmOpenJournal);
 		
-		mntmOpenJournal.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				journalFrame.setVisible(true);
-			}
-			
-		}
-	);
-		
 		JMenuItem menuNewJournal = new JMenuItem("\u0421\u043E\u0437\u0434\u0430\u0442\u044C \u0436\u0443\u0440\u043D\u0430\u043B");
 		mnFile.add(menuNewJournal);
 		
-		menuNewJournal.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				newJnlFrame.setVisible(true);
-			}
-		});
+		
+		
+		JMenuItem mntmCloseJournal = new JMenuItem("\u0417\u0430\u043A\u0440\u044B\u0442\u044C \u0436\u0443\u0440\u043D\u0430\u043B");
+		mnFile.add(mntmCloseJournal);
+		
 		
 		JMenuItem mntmExit = new JMenuItem("\u0412\u044B\u0445\u043E\u0434");
 		mnFile.add(mntmExit);
@@ -283,6 +274,7 @@ public class JournalApp {
 		menuBar.add(mnJnl);
 		
 		JMenuItem mntmShowJnl = new JMenuItem("\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u044C \u0436\u0443\u0440\u043D\u0430\u043B");
+		mntmShowJnl.setEnabled(false);
 		mnJnl.add(mntmShowJnl);
 		mntmShowJnl.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -316,6 +308,7 @@ public class JournalApp {
 		menuBar.add(menuEdit);
 		
 		JMenuItem mntmEditPupil = new JMenuItem("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0443\u0447\u0435\u043D\u0438\u043A\u0430");
+		mntmEditPupil.setEnabled(false);
 		mntmEditPupil.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int cntPup =0;
@@ -341,9 +334,40 @@ public class JournalApp {
 		
 		btnOK1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				mntmEditPupil.setEnabled(true);
+				mntmShowJnl.setEnabled(true);
 				classJnl.setMaxMarks((Integer) spinMarks.getValue());
 				classJnl.setMaxPupils((Integer) spinPupils.getValue());			
 				newJnlFrame.setVisible(false);
+				
+			}
+		});
+		btnCancel1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				menuNewJournal.setEnabled(true);
+				newJnlFrame.setVisible(false);
+			}
+		});
+
+		menuNewJournal.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				classJnl = new Journal();
+				newJnlFrame.setVisible(true);
+				spinPupils.setValue(1);
+				spinMarks.setValue(1);
+				mntmShowJnl.setEnabled(false);
+				menuNewJournal.setEnabled(false);
+			}
+		});
+		
+		mntmCloseJournal.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				classJnl = null;
+				mntmEditPupil.setEnabled(false);
+				mntmShowJnl.setEnabled(false);
+				menuNewJournal.setEnabled(true);
 			}
 		});
 	}
